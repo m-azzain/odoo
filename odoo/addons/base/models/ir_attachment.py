@@ -50,7 +50,7 @@ class IrAttachment(models.Model):
 
     @api.model
     def _storage(self):
-        return self.env['ir.config_parameter'].sudo().get_param('ir_attachment.location', 'file')
+        return self.env['ir.config_parameter'].sudo().get_param('ir_attachment.location', 'db')
 
     @api.model
     def _filestore(self):
