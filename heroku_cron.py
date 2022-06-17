@@ -19,7 +19,7 @@ from odoo.modules import initialize_sys_path
 
 SLEEP_INTERVAL = 60    # 1 minute
 
-DATABASE_URL_RE = re.compile(r'postgres://(?P<db_user>.+):(?P<db_password>.+)@(?P<db_host>.+):(?P<db_port>\d+)/(?P<db_name>.+)')
+DATABASE_URL_RE = re.compile(r'(?:postgresql|postgres)://(?P<db_user>.+):(?P<db_password>.+)@(?P<db_host>.+):(?P<db_port>\d+)/(?P<db_name>.+)')
 default_database_url = "postgres://db_initializer:db_initializer@localhost:5432/db_initializer"
 database_url = os.environ.get('DATABASE_URL', default_database_url)
 group_dict = DATABASE_URL_RE.match(database_url).groupdict()
