@@ -59,7 +59,7 @@ def cron_thread(number):
     # just a bit prevents they all poll the database at the exact
     # same time. This is known as the thundering herd effect.
 
-    from odoo.addons.base.models.ir_cron import ir_cron
+    # from odoo.addons.base.models.ir_cron import ir_cron
     # conn = odoo.sql_db.db_connect('postgres')
     conn = odoo.sql_db.db_connect(config['db_name'])
     with conn.cursor() as cr:
@@ -74,7 +74,8 @@ def cron_thread(number):
         cr.commit()
 
         # to initialize the registry
-        odoo.api.Environment(cr, odoo.SUPERUSER_ID, {})
+        evn = odoo.api.Environment(cr, odoo.SUPERUSER_ID, {})
+        ir_cron = evn['ir.cron']
 
         while True:
             select.select([pg_conn], [], [], SLEEP_INTERVAL + number)

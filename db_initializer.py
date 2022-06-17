@@ -33,6 +33,7 @@ config['db_port'] = group_dict['db_port']
 config['db_name'] = group_dict['db_name']
 config['addons_path'] = "addons"
 config['init']['base'] = True
+config['init']['website'] = True
 config['without_demo'] = 'all'
 
 
