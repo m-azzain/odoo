@@ -20,7 +20,7 @@ _logger = logging.getLogger(__name__)
 config = odoo.tools.config
 #. (dot): ANY ONE character except newline. Same as [^\n]
 #\w, \W: ANY ONE word/non-word character. For ASCII, word characters are [a-zA-Z0-9_]
-DATABASE_URL_RE = re.compile(r'postgres://(?P<db_user>.+):(?P<db_password>.+)@(?P<db_host>.+):(?P<db_port>\d+)/(?P<db_name>.+)')
+DATABASE_URL_RE = re.compile(r'(?:postgresql|postgres)://(?P<db_user>.+):(?P<db_password>.+)@(?P<db_host>.+):(?P<db_port>\d+)/(?P<db_name>.+)')
 
 default_database_url = "postgres://db_initializer:db_initializer@localhost:5432/db_initializer"
 database_url = os.environ.get('DATABASE_URL', default_database_url)
