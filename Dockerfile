@@ -1,4 +1,4 @@
-FROM debian:bullseye-slim
+FROM python:3.8.10-slim
 MAINTAINER Odoo S.A. <info@odoo.com>
 
 SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
@@ -7,7 +7,7 @@ SHELL ["/bin/bash", "-xo", "pipefail", "-c"]
 ENV LANG C.UTF-8
 
 # Install some deps, lessc and less-plugin-clean-css, and wkhtmltopdf
-RUN apt-get update && \
+RUN apt-get update --allow-releaseinfo-change -y && \
     apt-get install -y --no-install-recommends \
         ca-certificates \
         curl \
@@ -37,31 +37,37 @@ RUN apt-get update && \
     && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
 # install latest postgresql-client
-RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
-    && GNUPGHOME="$(mktemp -d)" \
-    && export GNUPGHOME \
-    && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
-    && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
-    && gpg --batch --armor --export "${repokey}" > /etc/apt/trusted.gpg.d/pgdg.gpg.asc \
-    && gpgconf --kill all \
-    && rm -rf "$GNUPGHOME" \
-    && apt-get update  \
-    && apt-get install --no-install-recommends -y postgresql-client \
-    && rm -f /etc/apt/sources.list.d/pgdg.list \
-    && rm -rf /var/lib/apt/lists/*
+# RUN echo 'deb http://apt.postgresql.org/pub/repos/apt/ bullseye-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
+#     && GNUPGHOME="$(mktemp -d)" \
+#     && export GNUPGHOME \
+#     && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
+#     && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
+#     && gpg --batch --armor --export "${repokey}" > /etc/apt/trusted.gpg.d/pgdg.gpg.asc \
+#     && gpgconf --kill all \
+#     && rm -rf "$GNUPGHOME" \
+#     && apt-get update --allow-releaseinfo-change -y \
+#     && apt-get install --no-install-recommends -y postgresql-client \
+#     && rm -f /etc/apt/sources.list.d/pgdg.list \
+#     && rm -rf /var/lib/apt/lists/*
 
 # Install rtlcss (on Debian buster)
 RUN npm install -g rtlcss
 
-COPY . /app
-WORKDIR /app
+#https://stackoverflow.com/questions/27701930/how-to-add-users-to-docker-container
+RUN useradd -rm -d /home/odoo -s /bin/bash -G sudo odoo
+WORKDIR /home/odoo/app
+COPY . /home/odoo/app
 
 # Install some deps, from the odoo docs
-RUN apt-get update && \
+RUN apt-get update --allow-releaseinfo-change -y && \
     apt-get install -y --no-install-recommends \
     python3-dev libxml2-dev libxslt1-dev libldap2-dev libsasl2-dev \
-    libtiff5-dev libjpeg8-dev libopenjp2-7-dev zlib1g-dev libfreetype6-dev \
-    liblcms2-dev libwebp-dev libharfbuzz-dev libfribidi-dev libxcb1-dev libpq-dev
+    libtiff5-dev \
+#     libjpeg8-dev \ has an issue: https://github.com/Automattic/node-canvas/issues/524
+    libjpeg62-turbo \
+    libopenjp2-7-dev zlib1g-dev libfreetype6-dev \
+    liblcms2-dev libwebp-dev libharfbuzz-dev libfribidi-dev libxcb1-dev libpq-dev \
+    build-essential
 
 RUN pip3 install setuptools wheel
 RUN pip3 install -r requirements.txt
