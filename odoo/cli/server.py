@@ -125,7 +125,7 @@ def import_translation():
 def main(args):
     check_root_user()
     odoo.tools.config.parse_config(args)
-    check_postgres_user()
+    # check_postgres_user()
     report_configuration()
 
     config = odoo.tools.config

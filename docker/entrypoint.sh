@@ -12,6 +12,8 @@ fi
 : ${PORT:=${DB_PORT_5432_TCP_PORT:=5432}}
 : ${USER:=${DB_ENV_POSTGRES_USER:=${POSTGRES_USER:='odoo'}}}
 : ${PASSWORD:=${DB_ENV_POSTGRES_PASSWORD:=${POSTGRES_PASSWORD:='odoo'}}}
+: ${DATABASE:=${DB_ENV_POSTGRES_DATABASE:=${POSTGRES_DATABASE:='railway'}}}
+
 
 DB_ARGS=()
 function check_config() {
@@ -27,6 +29,7 @@ check_config "db_host" "$HOST"
 check_config "db_port" "$PORT"
 check_config "db_user" "$USER"
 check_config "db_password" "$PASSWORD"
+check_config "db_name" "$DATABASE"
 
 case "$1" in
     -- | odoo)
