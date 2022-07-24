@@ -100,15 +100,11 @@ RUN chown odoo /etc/odoo/odoo.conf \
 USER odoo
 
 # Expose Odoo services
-EXPOSE 8069 8071 8072
+# EXPOSE 8069 8071 8072
+EXPOSE 8069
 
 # Set the default config file
 ENV ODOO_RC /etc/odoo/odoo.conf
-# ENV HOST=containers-us-west-81.railway.app
-# ENV PORT=6788
-# ENV USER=postgres
-# ENV PASSWORD=nBhFugzBRKZhtDQZFZAf
-# ENV DATABASE=railway
 
 WORKDIR /home/odoo/app
 COPY . .

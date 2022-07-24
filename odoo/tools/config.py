@@ -127,7 +127,7 @@ class configmanager(object):
 
         # HTTP
         group = optparse.OptionGroup(parser, "HTTP Service Configuration")
-        group.add_option("--http-interface", dest="http_interface", my_default='',
+        group.add_option("--http-interface", dest="http_interface", my_default='0.0.0.0',
                          help="Listen interface address for HTTP services. "
                               "Keep empty to listen on all interfaces (0.0.0.0)")
         group.add_option("-p", "--http-port", dest="http_port", my_default=8069,
